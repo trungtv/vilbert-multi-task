@@ -8,6 +8,11 @@ from .concept_cap_dataset import (
     ConceptCapLoaderVal,
     ConceptCapLoaderRetrieval,
 )
+from .facereading_dataset import (
+    FaceReadingLoaderTrain,
+    FaceReadingLoaderVal,
+    FaceReadingLoaderRetrieval,
+)
 from .foil_dataset import FoilClassificationDataset
 from .vqa_dataset import VQAClassificationDataset
 from .vqa_mc_dataset import VQAMultipleChoiceDataset
