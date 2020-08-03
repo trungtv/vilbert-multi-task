@@ -37,46 +37,6 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
-def iou(anchors, gt_boxes):
-    """
-    anchors: (N, 4) ndarray of float
-    gt_boxes: (K, 4) ndarray of float
-    overlaps: (N, K) ndarray of overlap between boxes and query_boxes
-    """
-    N = anchors.shape[0]
-    K = gt_boxes.shape[0]
-
-    gt_boxes_area = (
-        (gt_boxes[:, 2] - gt_boxes[:, 0] + 1) * (gt_boxes[:, 3] - gt_boxes[:, 1] + 1)
-    ).reshape(1, K)
-
-    anchors_area = (
-        (anchors[:, 2] - anchors[:, 0] + 1) * (anchors[:, 3] - anchors[:, 1] + 1)
-    ).reshape(N, 1)
-
-    boxes = np.repeat(anchors.reshape(N, 1, 4), K, axis=1)
-    query_boxes = np.repeat(gt_boxes.reshape(1, K, 4), N, axis=0)
-
-    iw = (
-        np.minimum(boxes[:, :, 2], query_boxes[:, :, 2])
-        - np.maximum(boxes[:, :, 0], query_boxes[:, :, 0])
-        + 1
-    )
-    iw[iw < 0] = 0
-
-    ih = (
-        np.minimum(boxes[:, :, 3], query_boxes[:, :, 3])
-        - np.maximum(boxes[:, :, 1], query_boxes[:, :, 1])
-        + 1
-    )
-    ih[ih < 0] = 0
-
-    ua = anchors_area + gt_boxes_area - (iw * ih)
-    overlaps = iw * ih / ua
-
-    return overlaps
-
-
 def deserialize_lmdb(ds):
     return msgpack.loads(
         ds[1],

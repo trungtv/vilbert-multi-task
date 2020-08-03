@@ -36,8 +36,8 @@ if __name__ == "__main__":
         for infile in tqdm.tqdm(infiles):
             reader = np.load(infile, allow_pickle=True)
             item = {}
-            item["image_id"] = reader.item().get("image_id")
-            img_id = str(item["image_id"]).encode()
+            item["video_id"] = reader.item().get("video_id")
+            img_id = str(item["video_id"]).encode()
             id_list.append(img_id)
             item["features"] = reader.item().get("features")
             txn.put(img_id, pickle.dumps(item))
